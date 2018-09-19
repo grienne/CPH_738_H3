@@ -1,0 +1,195 @@
+---
+title: "cph_738_h3"
+author: "grienne"
+date: "September 18, 2018"
+output: pdf_document
+---
+
+```{r Foundation}
+
+library(ggplot2)
+library(maps)
+library(dplyr)
+
+dat <- read.csv(file.choose(), header = TRUE)
+
+```
+
+
+
+```{r Question 1}
+
+##Code Bupropion 0 is No, x>0 is Yes
+dat$Bupdat <- as.factor(with(dat,ifelse(Bupropion == 0, 'No', 'Yes')))
+
+##Check to make sure still have same number of observations
+summary(dat$Bupdat)                 
+
+##Plotting
+q1 <- ggplot(data = dat, mapping = aes(y = AGE , x = Bupdat))
+q1 + geom_boxplot()
+q1 + geom_violin()
+
+```
+
+
+
+```{Question 2}
+
+#It does not seem appropriate to compare the average age of subjects between those who use and don't use Bupriopion.
+#There were over 90k "no" and only 1400 "yes." Reviewing the boxplot and the violin plot shows similar averages, however the variation in the no is heavily biased with the large number of outliers in the upper end, pulling the average higher than it might be if they were excluded. 
+
+```
+
+
+```{r Question 3}
+
+#Create Age Categories
+dat$q3_age <- with( dat,
+                      ifelse( 12 <= AGE & AGE <= 18, "Adolescent", 
+                        ifelse( 19<= AGE & AGE <= 27, "Young Adult",
+                          ifelse(28 <= AGE & AGE <= 65, "Adult", "Remove")      
+                                )      
+                              )
+                            )
+
+
+
+#Create Data Set with just those in the respective Age Categories
+q3_dat <- dat %>%
+  select(ENROLID, SEX, StUD_Year, StUD_Type, AGE, q3_age) %>%
+  filter(q3_age != "Remove")
+  
+dat$SUD_Type <- with(dat,
+                      ifelse(StUD_Type == 1, "Cocaine",
+                             ifelse(StUD_Type == 2, "Amphetamine",
+                                    "Both")
+                             )
+                      )
+
+
+
+
+
+
+```
+
+
+```
+```
+
+
+```{r Question 5}
+us_state_map <- map_data('state')
+str(us_state_map)
+summary(as.factor(map_data('state')$region))
+
+dat$region <- with(dat,
+                  ifelse(EGEOLOC == 41, 'alabama',
+                  ifelse(EGEOLOC == 52, 'arizona',
+                  ifelse(EGEOLOC == 46, 'arkansas',
+                  ifelse(EGEOLOC == 62, 'california',
+                  ifelse(EGEOLOC == 53, 'colorado',
+                  ifelse(EGEOLOC == 4,  'connecticut',
+                  ifelse(EGEOLOC == 32, 'delaware',
+                  ifelse(EGEOLOC == 31, 'district of columbia',
+                  ifelse(EGEOLOC == 33, 'florida',
+                  ifelse(EGEOLOC == 34, 'georgia',
+                  ifelse(EGEOLOC == 54, 'idaho',
+                  ifelse(EGEOLOC == 16, 'illinois',
+                  ifelse(EGEOLOC == 17, 'indiana',
+                  ifelse(EGEOLOC == 22, 'iowa',
+                  ifelse(EGEOLOC == 23, 'kansas',
+                  ifelse(EGEOLOC == 42, 'kentucky',
+                  ifelse(EGEOLOC == 47, 'lousiana',
+                  ifelse(EGEOLOC ==  5, 'maine',
+                  ifelse(EGEOLOC == 35, 'maryland',
+                  ifelse(EGEOLOC ==  6, 'massachusetts',
+                  ifelse(EGEOLOC == 18, 'michigan',
+                  ifelse(EGEOLOC == 24, 'minnesota',
+                  ifelse(EGEOLOC == 43, 'mississippi',
+                  ifelse(EGEOLOC == 25, 'missouri',
+                  ifelse(EGEOLOC == 55, 'montana',
+                  ifelse(EGEOLOC == 26, 'nebraska',
+                  ifelse(EGEOLOC == 56, 'nevade',
+                  ifelse(EGEOLOC ==  7, 'new hampshire',
+                  ifelse(EGEOLOC == 11, 'new jersey',
+                  ifelse(EGEOLOC == 57, 'new mexico',
+                  ifelse(EGEOLOC == 12, 'new york',
+                  ifelse(EGEOLOC == 36, 'north carolina',
+                  ifelse(EGEOLOC == 27, 'north dakota',
+                  ifelse(EGEOLOC == 19, 'ohio',
+                  ifelse(EGEOLOC == 48, 'oklahoma',
+                  ifelse(EGEOLOC == 64, 'oregon',
+                  ifelse(EGEOLOC == 13, 'pennsylvania',
+                  ifelse(EGEOLOC ==  8, 'rhode island',
+                  ifelse(EGEOLOC == 37, 'south carolina',
+                  ifelse(EGEOLOC == 28, 'south dakota',
+                  ifelse(EGEOLOC == 44, 'tennessee',
+                  ifelse(EGEOLOC == 49, 'texas',
+                  ifelse(EGEOLOC == 58, 'utah',
+                  ifelse(EGEOLOC ==  9, 'vermont',
+                  ifelse(EGEOLOC == 38, 'virginia',
+                  ifelse(EGEOLOC == 65, 'washington',
+                  ifelse(EGEOLOC == 39, 'west virginia',
+                  ifelse(EGEOLOC == 20, 'wisconsin',
+                  ifelse(EGEOLOC == 59, 'wyoming',
+                         NA))))))))))))))))))))))))))))))))))))))))))))))))))
+
+
+## create a tmp data.frame with AGE and state information only
+## Had NAs, removed them
+q5_age_adult <- select(dat, AGE, region, SUD_Type) %>%
+                  filter(18 <= AGE & AGE <= 65) %>%
+                  filter(!is.na(region))
+
+names(q5_age_adult) <- c("AGE", "region")
+
+## find state averages
+fit <- lm(AGE ~ region - 1, data = q5_age_adult)
+
+
+age.bar <- coefficients(fit)
+
+
+
+## list of states
+states = c("alabama","arizona","arkansas","california",
+           "colorado","connecticut","delaware","district of columbia",
+           "florida","georgia","idaho","illinois",
+           "indiana","iowa","kansas","kentucky",
+           "louisiana","maine","maryland","massachusetts",
+           "michigan","minnesota","mississippi","missouri",
+           "montana","nebraska","nevada","new hampshire",
+           "new jersey","new mexico","new york","north carolina",
+           "north dakota","ohio","oklahoma","oregon",
+           "pennsylvania","rhode island","south carolina","south dakota",
+           "tennessee","texas","utah","vermont",
+           "virginia","washington","west virginia","wisconsin",
+           "wyoming")
+
+tmp.dat <- data.frame(states, age.bar)
+names(tmp.dat) <- c('region', 'average_age')
+
+## merge with state map data
+map_dataAGE <- merge(us_state_map, tmp.dat, by ='region', all = T)
+
+## plot
+p = ggplot(map_dataAGE, aes(x = long, y = lat, group = group))
+p + geom_polygon(aes(fill = average_age)) +
+    geom_path(colour = 'gray', linestyle = 2)
+
+```
+
+
+```{Question 6}
+
+States with the highest CUD Prevalence
+
+```
+
+
+
+
+
+
