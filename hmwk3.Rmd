@@ -56,10 +56,7 @@ dat$q3_age <- with( dat,
 
 
 #Create Data Set with just those in the respective Age Categories
-q3_dat <- dat %>%
-  select(ENROLID, SEX, StUD_Year, StUD_Type, AGE, q3_age) %>%
-  filter(q3_age != "Remove")
-  
+
 dat$SUD_Type <- with(dat,
                       ifelse(StUD_Type == 1, "Cocaine",
                              ifelse(StUD_Type == 2, "Amphetamine",
@@ -68,7 +65,19 @@ dat$SUD_Type <- with(dat,
                       )
 
 
+q3_dat <- dat %>%
+  select(ENROLID, SEX, StUD_Year, StUD_Type, AGE, q3_age, SUD_Type) %>%
+  filter(q3_age != "Remove")
+  
 
+q3_dat_try <- 
+  count(q3_dat, SUD_Type, q3_age) %>%
+    mutate(freq = (n / (sum(n)) * 100) 
+                   )
+
+
+##p_q3 <- ggplot(data = q3_dat, mapping = aes(x = StUD_Year, colour = q3_age))
+##p_q3 + geom_line(y = )
 
 
 
