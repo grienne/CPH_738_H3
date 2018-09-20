@@ -12,6 +12,7 @@ library(maps)
 
 
 dat <- read.csv(file.choose(), header = TRUE)
+dat_wk <- read.csv(file.choose(), header = TRUE)
 
 ```
 
@@ -58,12 +59,23 @@ dat$q3_age <- with( dat,
 #Create Data Set with just those in the respective Age Categories
 
 dat$SUD_Type <- with(dat,
-                      ifelse(StUD_Type == 1, "Cocaine", 
-                             ifelse(StUD_Type == 2, "Amphetamine",
-                                    "Both")
-                             )
+                      ifelse(StUD_Type == 1, "Cocaine", "All"
+                                                          )
                       )
 
+####
+q3_dat <- dat %>%
+  select(ENROLID, SEX, StUD_Year, StUD_Type, AGE, q3_age, SUD_Type, REGION, EGEOLOC) %>%
+  filter(q3_age != "Remove")
+  
+
+q3_dat_try <- 
+  count(q3_dat, SUD_Type, q3_age, StUD_Year, REGION, EGEOLOC) %>%
+    mutate(frequency(n=n()))
+
+write.csv(q3_dat_try, "q3_dat_try.csv")
+
+####
 
 q3_dat <- dat %>%
   select(ENROLID, SEX, StUD_Year, StUD_Type, AGE, q3_age, SUD_Type) %>%
@@ -75,20 +87,15 @@ q3_dat_try <-
     mutate(freq = ((n / (sum(n))) * 100) 
                    )
 
-
-
-
-
-
-##p_q3 <- ggplot(data = q3_dat, mapping = aes(x = StUD_Year, colour = q3_age))
-##p_q3 + geom_line(y = )
+p_q3 <- ggplot(data = dat_wk, mapping = aes(x = year, y= pct, colour = age))
+p_q3 + geom_point() +  geom_line()
 
 
 
 ```
 
 
-```
+```{Question}
 ```
 
 
