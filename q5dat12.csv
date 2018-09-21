@@ -1,0 +1,216 @@
+region,EGEOLOC,SUD_Type,n
+connecticut,4,All,132
+connecticut,4,Cocaine,1070
+maine,5,All,44
+maine,5,Cocaine,101
+massachusetts,6,All,154
+massachusetts,6,Cocaine,608
+new hampshire,7,All,34
+new hampshire,7,Cocaine,120
+rhode island,8,All,17
+rhode island,8,Cocaine,110
+vermont,9,All,12
+vermont,9,Cocaine,23
+new jersey,11,All,127
+new jersey,11,Cocaine,711
+new york,12,All,844
+new york,12,Cocaine,5331
+pennsylvania,13,All,558
+pennsylvania,13,Cocaine,2408
+connecticut,4,Cocaine,1
+maine,5,Cocaine,1
+massachusetts,6,Cocaine,1
+new hampshire,7,All,1
+new hampshire,7,Cocaine,1
+rhode island,8,Cocaine,1
+vermont,9,Cocaine,1
+illinois,16,All,435
+illinois,16,Cocaine,1809
+indiana,17,All,709
+indiana,17,Cocaine,733
+michigan,18,All,323
+michigan,18,Cocaine,1214
+ohio,19,All,499
+ohio,19,Cocaine,1711
+wisconsin,20,All,149
+wisconsin,20,Cocaine,442
+iowa,22,All,258
+iowa,22,Cocaine,92
+kansas,23,All,135
+kansas,23,Cocaine,100
+minnesota,24,All,236
+minnesota,24,Cocaine,142
+missouri,25,All,404
+missouri,25,Cocaine,353
+nebraska,26,All,82
+nebraska,26,Cocaine,34
+north dakota,27,All,35
+north dakota,27,Cocaine,2
+south dakota,28,All,32
+south dakota,28,Cocaine,3
+connecticut,4,All,4
+connecticut,4,Cocaine,13
+maine,5,Cocaine,1
+massachusetts,6,All,3
+massachusetts,6,Cocaine,9
+new hampshire,7,All,1
+new hampshire,7,Cocaine,2
+rhode island,8,Cocaine,1
+vermont,9,All,1
+district of columbia,31,All,20
+district of columbia,31,Cocaine,43
+delaware,32,All,36
+delaware,32,Cocaine,173
+florida,33,All,507
+florida,33,Cocaine,1671
+georgia,34,All,684
+georgia,34,Cocaine,1159
+maryland,35,All,72
+maryland,35,Cocaine,466
+north carolina,36,All,306
+north carolina,36,Cocaine,971
+south carolina,37,All,578
+south carolina,37,Cocaine,1387
+virginia,38,All,162
+virginia,38,Cocaine,434
+west virginia,39,All,164
+west virginia,39,Cocaine,173
+alabama,41,All,219
+alabama,41,Cocaine,305
+kentucky,42,All,341
+kentucky,42,Cocaine,378
+mississippi,43,All,148
+mississippi,43,Cocaine,174
+tennessee,44,All,308
+tennessee,44,Cocaine,559
+arkansas,46,All,162
+arkansas,46,Cocaine,65
+lousiana,47,All,539
+lousiana,47,Cocaine,725
+oklahoma,48,All,439
+oklahoma,48,Cocaine,156
+texas,49,All,1930
+texas,49,Cocaine,2464
+massachusetts,6,All,1
+massachusetts,6,Cocaine,1
+new hampshire,7,All,1
+new hampshire,7,Cocaine,2
+rhode island,8,Cocaine,1
+arizona,52,All,434
+arizona,52,Cocaine,243
+colorado,53,All,211
+colorado,53,Cocaine,248
+idaho,54,All,218
+idaho,54,Cocaine,31
+montana,55,All,97
+montana,55,Cocaine,16
+nevade,56,All,250
+nevade,56,Cocaine,91
+new mexico,57,All,342
+new mexico,57,Cocaine,408
+utah,58,All,213
+utah,58,Cocaine,65
+wyoming,59,All,48
+wyoming,59,Cocaine,15
+NA,61,All,18
+NA,61,Cocaine,24
+california,62,All,4638
+california,62,Cocaine,1707
+NA,63,All,10
+NA,63,Cocaine,4
+oregon,64,All,319
+oregon,64,Cocaine,111
+washington,65,All,510
+washington,65,Cocaine,290
+NA,1,All,73
+NA,1,Cocaine,329
+connecticut,4,All,15
+connecticut,4,Cocaine,98
+maine,5,All,4
+maine,5,Cocaine,11
+massachusetts,6,All,5
+massachusetts,6,Cocaine,13
+new hampshire,7,All,5
+new hampshire,7,Cocaine,11
+rhode island,8,All,2
+rhode island,8,Cocaine,11
+vermont,9,All,1
+vermont,9,Cocaine,2
+new jersey,11,All,5
+new jersey,11,Cocaine,23
+new york,12,All,18
+new york,12,Cocaine,131
+pennsylvania,13,All,4
+pennsylvania,13,Cocaine,29
+illinois,16,All,12
+illinois,16,Cocaine,30
+indiana,17,All,141
+indiana,17,Cocaine,130
+michigan,18,All,24
+michigan,18,Cocaine,32
+ohio,19,All,61
+ohio,19,Cocaine,166
+wisconsin,20,All,15
+wisconsin,20,Cocaine,19
+iowa,22,All,5
+iowa,22,Cocaine,3
+kansas,23,All,5
+kansas,23,Cocaine,5
+minnesota,24,All,11
+minnesota,24,Cocaine,7
+missouri,25,All,7
+missouri,25,Cocaine,7
+nebraska,26,All,4
+north dakota,27,All,1
+south dakota,28,All,1
+delaware,32,Cocaine,4
+florida,33,All,12
+florida,33,Cocaine,33
+georgia,34,All,16
+georgia,34,Cocaine,14
+maryland,35,All,2
+maryland,35,Cocaine,10
+north carolina,36,All,10
+north carolina,36,Cocaine,42
+south carolina,37,All,3
+south carolina,37,Cocaine,13
+virginia,38,All,78
+virginia,38,Cocaine,266
+west virginia,39,All,17
+west virginia,39,Cocaine,14
+alabama,41,All,7
+alabama,41,Cocaine,8
+kentucky,42,All,24
+kentucky,42,Cocaine,35
+mississippi,43,All,7
+mississippi,43,Cocaine,2
+tennessee,44,All,9
+tennessee,44,Cocaine,12
+arkansas,46,All,5
+arkansas,46,Cocaine,2
+lousiana,47,All,3
+lousiana,47,Cocaine,6
+oklahoma,48,All,6
+texas,49,All,18
+texas,49,Cocaine,32
+arizona,52,All,13
+arizona,52,Cocaine,4
+colorado,53,All,6
+colorado,53,Cocaine,6
+idaho,54,All,2
+nevade,56,All,4
+new mexico,57,All,1
+new mexico,57,Cocaine,2
+utah,58,All,10
+utah,58,Cocaine,2
+NA,61,All,3
+NA,61,Cocaine,1
+california,62,All,55
+california,62,Cocaine,16
+oregon,64,All,4
+oregon,64,Cocaine,2
+washington,65,All,13
+washington,65,Cocaine,4
+NA,97,All,1
+NA,97,Cocaine,11
+NA,98,Cocaine,1

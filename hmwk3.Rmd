@@ -12,10 +12,6 @@ library(maps)
 library(plyr)
 
 dat <- read.csv(file.choose(), header = TRUE)
-dat_wk <- read.csv(file.choose(), header = TRUE)
-map_datpct_2 <- read.csv(file.choose(), header = TRUE)
-
-
 
 ```
 
@@ -140,18 +136,29 @@ p_q3 + geom_point() +  geom_line()
 ```
 
 
-```{Question}
+```{Question 4}
 ```
 
 
 ```{r Question 5}
 us_state_map <- map_data('state') 
-
-
-
-
 str(us_state_map)
 summary(as.factor(map_data('state')$region))
+
+## create a tmp data.frame with AGE and state information only
+## Had NAs, removed them
+
+q5_dat <- dat %>%
+  filter(AGE <= 65) %>%
+  filter(AGE >= 28)
+
+#generate counts
+#
+q5_dat_1 <- q5_dat %>%
+  select(EGEOLOC, SUD_Type) %>%  
+    group_by(EGEOLOC, SUD_Type)  %>%
+      summarise(n = n()) %>%
+        set_names("EGEOLOC", "drug", "n")
 
 q5_dat_1$region <- with(q5_dat_1,
                   ifelse(EGEOLOC == 41, 'alabama',
@@ -205,29 +212,17 @@ q5_dat_1$region <- with(q5_dat_1,
                   ifelse(EGEOLOC == 59, 'wyoming',
                          NA))))))))))))))))))))))))))))))))))))))))))))))))))
 
-
-## create a tmp data.frame with AGE and state information only
-## Had NAs, removed them
-
-q5_dat <- dat %>%
-  select(REGION, EGEOLOC , SUD_Type, q3_age) %>%
-  filter(q3_age == "Adult")
+q5_dat_1_final <- q5_dat_1 %>%
+  select(region, drug, n) %>%
+    mutate(prop = n / sum(n))
 
 
+aggregate(n ~ region, data = q5_dat_1_final, FUN = sum) 
 
-q5_dat_1 <- q5_dat %>%
- group_by(q3_age, REGION, EGEOLOC, SUD_Type)  %>%
-      summarise(n = n()) %>%
-      mutate(pct = n / sum(n)) %>%
-        filter(SUD_Type == "Cocaine")
-
-q5_dat_1 <- q5_dat_1 %>%
-          select(q3_age, REGION, EGEOLOC, SUD_Type, pct) %>%
-            set_names("q3_age", "region", "EGEOLOC", "SUD_Type", "pct")
-    
-
-
-##names(q5_age_adult) <- c("AGE", "region")
+##success
+q5_dat_final <- q5_dat_1_final %>%
+      select(region, drug, prop) %>%
+        filter(drug != "All")
 
 
 ## list of states
@@ -246,26 +241,14 @@ states = c("alabama","arizona","arkansas","california",
            "wyoming")
 
 
-## merge with state map data
-map_datapct <- merge(us_state_map, q5_dat_1, by ='region', all = T) %>%
-          filter(!is.na(region)) %>%
-            filter(!is.na(long)) %>%
-              filter(!is.na(lat)) %>%
-                filter(!is.na(group)) %>%
-                  filter(!is.na(order)) %>%
-                   filter(!is.na(q3_age)) %>%
-                    filter(!is.na(EGEOLOC)) %>%
-                      filter(!is.na(SUD_Type)) %>%
-                        filter(!is.na(pct))
-  
-         
-write.csv(map_datapct, "map_datpct.csv")  
 
+## merge with state map data
+map_dat_prop <- merge(us_state_map, q5_dat_final, by ='region', all = T) 
 
 ## plot
-p <- ggplot(map_datpct_2, aes(x = long, y = lat, group = group))
-p + geom_polygon(aes(fill = pct)) +
-    geom_path(colour = 'gray')
+p <- ggplot(map_dat_prop, aes(x = long, y = lat, group = group)) 
+p + geom_polygon(aes(fill = prop)) + 
+  geom_path(colour = 'gray') 
 
 ```
 
