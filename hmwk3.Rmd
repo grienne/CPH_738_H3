@@ -9,10 +9,13 @@ output: pdf_document
 
 library(tidyverse)
 library(maps)
-
+library(plyr)
 
 dat <- read.csv(file.choose(), header = TRUE)
 dat_wk <- read.csv(file.choose(), header = TRUE)
+map_datpct_2 <- read.csv(file.choose(), header = TRUE)
+
+
 
 ```
 
@@ -48,7 +51,7 @@ q1 + geom_violin()
 #Create Age Categories
 dat$q3_age <- with( dat,
                       ifelse( 12 <= AGE & AGE <= 18, "Adolescent", 
-                        ifelse( 19<= AGE & AGE <= 27, "Young Adult",
+                        ifelse( 19<= AGE & AGE <= 27, "Young_Adult",
                           ifelse(28 <= AGE & AGE <= 65, "Adult", "Remove")      
                                 )      
                               )
@@ -65,29 +68,71 @@ dat$SUD_Type <- with(dat,
 
 ####
 q3_dat <- dat %>%
-  select(ENROLID, SEX, StUD_Year, StUD_Type, AGE, q3_age, SUD_Type, REGION, EGEOLOC) %>%
+  select(StUD_Year, StUD_Type, q3_age, SUD_Type) %>%
   filter(q3_age != "Remove")
+
+
+## Adolescent
+
+q3_adol <- dat %>%
+  select(q3_age,  SUD_Type, StUD_Year) %>%
+  filter(q3_age == "Adolescent")
+
+###generate percentages
+q3_adol_1 <- q3_adol %>%
+    group_by(q3_age, StUD_Year, SUD_Type)  %>%
+      summarise(n = n()) %>%
+      mutate(pct = n / sum(n))
+
+
+
+##Young Adult  
   
+q3_yadul <- dat %>%
+  select(q3_age,StUD_Year, SUD_Type) %>%
+  filter(q3_age == "Young_Adult")
 
-q3_dat_try <- 
-  count(q3_dat, SUD_Type, q3_age, StUD_Year, REGION, EGEOLOC) %>%
-    mutate(frequency(n=n()))
+##Age Tables Adolescent
+q3_yadul <- dat %>%
+  select(q3_age,  SUD_Type, StUD_Year) %>%
+  filter(q3_age == "Young_Adult")
 
-write.csv(q3_dat_try, "q3_dat_try.csv")
+###generate percentages
+q3_yadul_1 <- q3_yadul %>%
+    group_by(q3_age, StUD_Year, SUD_Type)  %>%
+      summarise(n = n()) %>%
+      mutate(pct = n / sum(n))
 
-####
 
-q3_dat <- dat %>%
-  select(ENROLID, SEX, StUD_Year, StUD_Type, AGE, q3_age, SUD_Type) %>%
-  filter(q3_age != "Remove")
-  
+##Adult
+q3_adul <- dat %>%
+  select(q3_age, StUD_Year, SUD_Type) %>%
+  filter(q3_age == "Adult")
+##Age Tables Adolescent
+q3_adul <- dat %>%
+  select(q3_age,  SUD_Type, StUD_Year) %>%
+  filter(q3_age == "Adult")
 
-q3_dat_try <- 
-  count(q3_dat, SUD_Type, q3_age, StUD_Year) %>%
-    mutate(freq = ((n / (sum(n))) * 100) 
-                   )
+###generate percentages
+q3_adul_1 <- q3_adul %>%
+    group_by(q3_age, StUD_Year, SUD_Type)  %>%
+      summarise(n = n()) %>%
+      mutate(pct = n / sum(n))
 
-p_q3 <- ggplot(data = dat_wk, mapping = aes(x = year, y= pct, colour = age))
+
+##write.csv(q3_dat_try, "q3_dat_try.csv")
+##how to generate csv files from internally created dataframes
+
+
+###
+
+q3_final <- bind_rows(q3_adol_1, q3_adul_1, q3_yadul_1) %>%
+          filter(SUD_Type != "All")
+
+
+###
+
+p_q3 <- ggplot(data = q3_final, mapping = aes(x = StUD_Year, y= pct, colour = q3_age))
 p_q3 + geom_point() +  geom_line()
 
 
@@ -100,11 +145,15 @@ p_q3 + geom_point() +  geom_line()
 
 
 ```{r Question 5}
-us_state_map <- map_data('state')
+us_state_map <- map_data('state') 
+
+
+
+
 str(us_state_map)
 summary(as.factor(map_data('state')$region))
 
-dat$region <- with(dat,
+q5_dat_1$region <- with(q5_dat_1,
                   ifelse(EGEOLOC == 41, 'alabama',
                   ifelse(EGEOLOC == 52, 'arizona',
                   ifelse(EGEOLOC == 46, 'arkansas',
@@ -159,18 +208,26 @@ dat$region <- with(dat,
 
 ## create a tmp data.frame with AGE and state information only
 ## Had NAs, removed them
-q5_age_adult <- select(dat, AGE, region, SUD_Type) %>%
-                  filter(18 <= AGE & AGE <= 65) %>%
-                  filter(!is.na(region))
 
-names(q5_age_adult) <- c("AGE", "region")
-
-## find state averages
-fit <- lm(AGE ~ region - 1, data = q5_age_adult)
+q5_dat <- dat %>%
+  select(REGION, EGEOLOC , SUD_Type, q3_age) %>%
+  filter(q3_age == "Adult")
 
 
-age.bar <- coefficients(fit)
 
+q5_dat_1 <- q5_dat %>%
+ group_by(q3_age, REGION, EGEOLOC, SUD_Type)  %>%
+      summarise(n = n()) %>%
+      mutate(pct = n / sum(n)) %>%
+        filter(SUD_Type == "Cocaine")
+
+q5_dat_1 <- q5_dat_1 %>%
+          select(q3_age, REGION, EGEOLOC, SUD_Type, pct) %>%
+            set_names("q3_age", "region", "EGEOLOC", "SUD_Type", "pct")
+    
+
+
+##names(q5_age_adult) <- c("AGE", "region")
 
 
 ## list of states
@@ -188,16 +245,27 @@ states = c("alabama","arizona","arkansas","california",
            "virginia","washington","west virginia","wisconsin",
            "wyoming")
 
-tmp.dat <- data.frame(states, age.bar)
-names(tmp.dat) <- c('region', 'average_age')
 
 ## merge with state map data
-map_dataAGE <- merge(us_state_map, tmp.dat, by ='region', all = T)
+map_datapct <- merge(us_state_map, q5_dat_1, by ='region', all = T) %>%
+          filter(!is.na(region)) %>%
+            filter(!is.na(long)) %>%
+              filter(!is.na(lat)) %>%
+                filter(!is.na(group)) %>%
+                  filter(!is.na(order)) %>%
+                   filter(!is.na(q3_age)) %>%
+                    filter(!is.na(EGEOLOC)) %>%
+                      filter(!is.na(SUD_Type)) %>%
+                        filter(!is.na(pct))
+  
+         
+write.csv(map_datapct, "map_datpct.csv")  
+
 
 ## plot
-p = ggplot(map_dataAGE, aes(x = long, y = lat, group = group))
-p + geom_polygon(aes(fill = average_age)) +
-    geom_path(colour = 'gray', linestyle = 2)
+p <- ggplot(map_datpct_2, aes(x = long, y = lat, group = group))
+p + geom_polygon(aes(fill = pct)) +
+    geom_path(colour = 'gray')
 
 ```
 
