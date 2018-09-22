@@ -11,6 +11,8 @@ library(tidyverse)
 library(maps)
 library(plyr)
 
+##fiddle with plyr, sometimes it conflicts with dplyer, detach if needed
+
 dat <- read.csv(file.choose(), header = TRUE)
 
 ```
@@ -34,12 +36,11 @@ q1 + geom_violin()
 
 
 
-```{Question 2}
+### Question 2
 
-#It does not seem appropriate to compare the average age of subjects between those who use and don't use Bupriopion.
-#There were over 90k "no" and only 1400 "yes." Reviewing the boxplot and the violin plot shows similar averages, however the variation in the no is heavily biased with the large number of outliers in the upper end, pulling the average higher than it might be if they were excluded. 
+It does not seem appropriate to compare the average age of subjects between those who use and don't use Bupriopion.
+There were over 90k "no" and only 1400 "yes." Reviewing the boxplot and the violin plot shows similar averages, however the variation in the no is heavily biased with the large number of outliers in the upper end, pulling the average higher than it might be if they were excluded. 
 
-```
 
 
 ```{r Question 3}
@@ -109,35 +110,30 @@ q3_adul <- dat %>%
   select(q3_age,  SUD_Type, StUD_Year) %>%
   filter(q3_age == "Adult")
 
-###generate percentages
+##generate percentages
 q3_adul_1 <- q3_adul %>%
     group_by(q3_age, StUD_Year, SUD_Type)  %>%
       summarise(n = n()) %>%
       mutate(pct = n / sum(n))
 
 
-##write.csv(q3_dat_try, "q3_dat_try.csv")
-##how to generate csv files from internally created dataframes
-
-
-###
-
+##collapse frames together
 q3_final <- bind_rows(q3_adol_1, q3_adul_1, q3_yadul_1) %>%
           filter(SUD_Type != "All")
 
 
-###
+##Generate Plot
 
 p_q3 <- ggplot(data = q3_final, mapping = aes(x = StUD_Year, y= pct, colour = q3_age))
 p_q3 + geom_point() +  geom_line()
 
-
-
 ```
 
 
-```{Question 4}
-```
+### Question 4
+
+
+
 
 
 ```{r Question 5}
@@ -145,21 +141,29 @@ us_state_map <- map_data('state')
 str(us_state_map)
 summary(as.factor(map_data('state')$region))
 
-## create a tmp data.frame with AGE and state information only
-## Had NAs, removed them
+q5_dat_23 <- dat %>%
+    select(EGEOLOC, AGE, SUD_Type) %>%  
+    group_by(EGEOLOC, AGE, SUD_Type)  %>%
+      summarise(n = n()) %>%
+        filter(AGE <= 65) %>%
+          filter(AGE >= 28)
+    
+write.csv(q5_dat_23, "q5_23.csv")
 
+
+##create frame with appropriate age range
 q5_dat <- dat %>%
   filter(AGE <= 65) %>%
   filter(AGE >= 28)
 
-#generate counts
-#
+##generate counts
 q5_dat_1 <- q5_dat %>%
   select(EGEOLOC, SUD_Type) %>%  
     group_by(EGEOLOC, SUD_Type)  %>%
       summarise(n = n()) %>%
         set_names("EGEOLOC", "drug", "n")
 
+##name states for manipulation
 q5_dat_1$region <- with(q5_dat_1,
                   ifelse(EGEOLOC == 41, 'alabama',
                   ifelse(EGEOLOC == 52, 'arizona',
@@ -212,24 +216,26 @@ q5_dat_1$region <- with(q5_dat_1,
                   ifelse(EGEOLOC == 59, 'wyoming',
                          NA))))))))))))))))))))))))))))))))))))))))))))))))))
 
+##find proportions
 q5_dat_1_final <- q5_dat_1 %>%
   select(region, drug, n) %>%
     mutate(prop = n / sum(n))
 
+##collapse states
 aggregate(n ~ region, data = q5_dat_1_final, FUN = sum) 
 
-##success
+##success, note EGEOLOC will add due to it being a "grouped factor above"
+##Next stage creates a temp data set that undoes the impact of "grouping that was likely causing errors"
+##In the future use function 'ungroup()'
 q5_dat_final <- q5_dat_1_final %>%
       select(region, drug, prop) %>%
         filter(drug != "All") %>%
         filter(region != "NA")
 
-prop2 <- data.frame(q5_dat_final$prop) 
-
-
-
-tmp_dat_q5 <- data.frame(states, prop2)
-names(tmp_dat_q5) <- c('region', 'prop')
+##Had to arrange by region so when pulling prop would be in correct order
+##In the future simply ungrouping in the first place would have removed most of these extra steps
+q5_final <- arrange(q5_dat_final, region)
+          
 
 
 ## list of states
@@ -247,7 +253,16 @@ states = c("alabama","arizona","arkansas","california",
            "virginia","washington","west virginia","wisconsin",
            "wyoming")
 
+##creating map-useful dataset
+##Meet with Olga to discuss map commands in-depth
 
+##This creates a proportion only dataframe
+prop2 <- data.frame(q5_final$prop) 
+
+##this creates a new dataframe with prop and states, changed to region
+##likely this has to be done to undo the EGEOLOC grouping. 
+tmp_dat_q5 <- data.frame(states, prop2)
+names(tmp_dat_q5) <- c('region', 'prop')
 
 ## merge with state map data
 map_dat_prop_tp <- merge(us_state_map, tmp_dat_q5, by ='region', all = T) 
@@ -260,11 +275,11 @@ p + geom_polygon(aes(fill = prop)) +
 ```
 
 
-```{Question 6}
+### Question 6
 
-States with the highest CUD Prevalence
+States with the highest CUD Prevalence - Alabama, Colorado, Nebraska
+States with the lowest CUD Prevalence - Massachusetts, Michigan, Tennessee
 
-```
 
 
 
