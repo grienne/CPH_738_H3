@@ -216,13 +216,20 @@ q5_dat_1_final <- q5_dat_1 %>%
   select(region, drug, n) %>%
     mutate(prop = n / sum(n))
 
-
 aggregate(n ~ region, data = q5_dat_1_final, FUN = sum) 
 
 ##success
 q5_dat_final <- q5_dat_1_final %>%
       select(region, drug, prop) %>%
-        filter(drug != "All")
+        filter(drug != "All") %>%
+        filter(region != "NA")
+
+prop2 <- data.frame(q5_dat_final$prop) 
+
+
+
+tmp_dat_q5 <- data.frame(states, prop2)
+names(tmp_dat_q5) <- c('region', 'prop')
 
 
 ## list of states
@@ -243,10 +250,10 @@ states = c("alabama","arizona","arkansas","california",
 
 
 ## merge with state map data
-map_dat_prop <- merge(us_state_map, q5_dat_final, by ='region', all = T) 
+map_dat_prop_tp <- merge(us_state_map, tmp_dat_q5, by ='region', all = T) 
 
 ## plot
-p <- ggplot(map_dat_prop, aes(x = long, y = lat, group = group)) 
+p <- ggplot(map_dat_prop_tp, aes(x = long, y = lat, group = group)) 
 p + geom_polygon(aes(fill = prop)) + 
   geom_path(colour = 'gray') 
 
