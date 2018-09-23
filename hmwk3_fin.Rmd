@@ -3,6 +3,8 @@ title: "cph_738_h3"
 author: "grienne"
 date: "September 18, 2018"
 output:
+  html_document:
+    df_print: paged
   pdf_document: default
   word_document: default
 ---
@@ -11,10 +13,12 @@ output:
 
 library(tidyverse)
 library(maps)
-
-
+library(knitr)
+library(markdown)
 ##fiddle with plyr, sometimes it conflicts with dplyer, detach if needed
 ##in the GitRepo there are many extra CSVs, only the EX854 file is needed. 
+
+
 dat <- read.csv(file.choose(), header = TRUE)
 
 ```
