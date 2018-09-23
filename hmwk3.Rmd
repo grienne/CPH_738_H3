@@ -12,7 +12,7 @@ library(maps)
 library(plyr)
 
 ##fiddle with plyr, sometimes it conflicts with dplyer, detach if needed
-
+##in the GitRepo there are many extra CSVs, only the dat file is needed. 
 dat <- read.csv(file.choose(), header = TRUE)
 
 ```
