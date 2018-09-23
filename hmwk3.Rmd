@@ -2,7 +2,9 @@
 title: "cph_738_h3"
 author: "grienne"
 date: "September 18, 2018"
-output: pdf_document
+output:
+  pdf_document: default
+  word_document: default
 ---
 
 ```{r Foundation}
