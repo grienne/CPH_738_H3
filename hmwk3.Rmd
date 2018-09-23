@@ -12,13 +12,13 @@ library(maps)
 library(plyr)
 
 ##fiddle with plyr, sometimes it conflicts with dplyer, detach if needed
-##in the GitRepo there are many extra CSVs, only the dat file is needed. 
+##in the GitRepo there are many extra CSVs, only the EX854 file is needed. 
 dat <- read.csv(file.choose(), header = TRUE)
 
 ```
 
 
-
+### Question 1
 ```{r Question 1}
 
 ##Code Bupropion 0 is No, x>0 is Yes
@@ -42,7 +42,7 @@ It does not seem appropriate to compare the average age of subjects between thos
 There were over 90k "no" and only 1400 "yes." Reviewing the boxplot and the violin plot shows similar averages, however the variation in the no is heavily biased with the large number of outliers in the upper end, pulling the average higher than it might be if they were excluded. 
 
 
-
+### Question 3
 ```{r Question 3}
 
 #Create Age Categories
@@ -134,8 +134,23 @@ p_q3 + geom_point() +  geom_line()
 
 
 
+  The question 3 graph shows the proportion of cocaine only substance abuse disorder amongst substance use disorders. The denominator incorporates the use of amphetamines, cocaine, and those who use both amphetamines and cocaine. The graph shows that cocaine use disorder as a proportion of substance disorders has decreased since 2009 across all age groups with a slight rise in adolescents. Given the increase in prescription drug use (1) the decrease in proportional cocaine only use is likely due to the changing landscape of substance use.
+  Most adolescents start using marijuana (3) then prescription drug use, this conflicts with the current findings, but most research focuses on the population as a whole. The Truven dataset covers only about 50% of the population as a result those who are particularly disadvantaged are not represented and the demographics and behavior of initial drug use are likely to be skewed.   
+  Distinguishing between the young adult and adult population can be difficult at times. However, Schulte reported that young adults had the highest rates of medical emergencies due to drug use in comparison to other groups due to marijuana,a heroin, and amphetamines.
+SAMHSA actually showed that heroin was used significantly more often than cocaine (2) conflicting with the proportions found, it also showed a stabilizing rate of use which has been corroborated in other reporting (1), (3), (4). The adult population proportional cocaine use seems similar, with significantly lower cocaine use rates than seen here and a more stabilized rate overall.
+  Overall, the trend downwards for cocaine use is similar to other reports (3), but the proportion does not seem to be accurately representative although it should be noted that the Truven set only has approximately 50% of the population so generalizability is limited. The Truven data and the question 3 graph focused on amphetamines compared to cocaine so making inferences about proportional comparison must be taken judiciously, but the overall trend downwards is fairly accurate. Given that the graph focuses on comparing amphetamine to cocaine use the findings may balance out if other substance use disorders were incorporated into the comparison. 
 
 
+1. Center for Behavioral Health Statistics and Quality. (2015). Behavioral health trends in the United States:
+Results from the 2014 National Survey on Drug Use and Health (HHS Publication No. SMA 15-4927, NSDUH Series H-50). 
+Retrieved from http://www.samhsa.gov/data/
+2. Lipari, R.N. and Van Horn, S.L. Trends in substance use disorders among adults aged 18 or older. The CBHSQ Report: June 29, 2017. Center for Behavioral Health Statistics and Quality, Substance Abuse and Mental Health Services Administration, Rockville, MD.
+3. NIDA. (2015, June 25). Nationwide Trends. Retrieved from https://www.drugabuse.gov/publications/drugfacts/nationwide-trends on 2018, September 22
+4. Schulte, M. T., & Hser, Y.-I. (2014). Substance Use and Associated Health Conditions throughout the Lifespan. Public Health Reviews, 35(2), https://web–beta.archive.org/web/20150206061220/http://www.publichealthreviews.eu/upload/pdf_files/14/00_Schulte_Hser.pdf.
+
+
+
+### Question 5
 ```{r Question 5}
 us_state_map <- map_data('state') 
 str(us_state_map)
