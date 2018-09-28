@@ -3,23 +3,29 @@ title: "cph_738_h3"
 author: "grienne"
 date: "September 18, 2018"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
   word_document: default
 ---
 
-```{r Foundation}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r Foundation, echo=FALSE}
 
 library(tidyverse)
 library(maps)
 library(knitr)
 library(markdown)
+library(readxl)
+library(ggplot2)
 ##fiddle with plyr, sometimes it conflicts with dplyer, detach if needed
 ##in the GitRepo there are many extra CSVs, only the EX854 file is needed. 
 
-
-dat <- read.csv(file.choose(), header = TRUE)
+dat <- read_excel("EX854_V3_DH_2.xlsx")
 
 ```
 
@@ -32,11 +38,15 @@ dat$Bupdat <- as.factor(with(dat,ifelse(Bupropion == 0, 'No', 'Yes')))
 
 ##Check to make sure still have same number of observations
 summary(dat$Bupdat)                 
-
+str(dat$Bupdat)
 ##Plotting
 q1 <- ggplot(data = dat, mapping = aes(y = AGE , x = Bupdat))
 q1 + geom_boxplot()
 q1 + geom_violin()
+
+
+q1_2 <- ggplot(data = dat, mapping = aes(x = AGE , fill = Bupdat))
+q1_2 + geom_density()
 
 ```
 
@@ -45,7 +55,7 @@ q1 + geom_violin()
 ### Question 2
 
 It is not appropriate to compare the average age of subjects between those who use and don't use Bupriopion.
-There were over 90k "no" and only 1400 "yes." Reviewing the boxplot and the violin plot shows similar averages, however the variation in the "no is heavily biased with the large number of outliers in the upper end, pulling the average higher than it might be if they were excluded. 
+There were over 90k "no" and only 1400 "yes." Reviewing the density plot shows a bimodal distribution. 
 
 
 ### Question 3
